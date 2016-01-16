@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 /**
  * Created by admi on 9/9/15.
@@ -23,7 +24,7 @@ public class DbAccess extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String userRegistartion_table = "CREATE TABLE IF NOT EXISTS   " + table_userRegistration+ " (name TEXT, email TEXT, gender TEXT, birthday TEXT,location TEXT, password TEXT)";
         db.execSQL(userRegistartion_table);
-        String complaintDetails_table = "CREATE TABLE IF NOT EXISTS   " + table_complaintDetails+ " (cid INTEGER PRIMARY KEY autoincrement, complaintMessage TEXT, image TEXT, name TEXT, email TEXT, datetime TEXT,city ,lattitude INTEGER,logitude, complaintAddress TEXT )";
+        String complaintDetails_table = "CREATE TABLE IF NOT EXISTS   " + table_complaintDetails+ " (cid INTEGER PRIMARY KEY autoincrement, complaintMessage TEXT, image BLOB, name TEXT, email TEXT, datetime TEXT,city ,lattitude INTEGER,logitude, complaintAddress TEXT )";
         db.execSQL(complaintDetails_table);
     }
 
@@ -41,13 +42,14 @@ public class DbAccess extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("INSERT INTO " + table_userRegistration + "(name,email,gender,birthday,location,password) VALUES('" + name + "','" + email + "','" + gender + "', '" + birthday + "', ' " + location + "', '" + password + "')");
         db.close();
+        Toast.makeText(context_,"Data Inserted",Toast.LENGTH_SHORT).show();
 
     }
 
 
-    public void addComplaint(String complaintMessage,String image,String name,String date,int lat,int lon,String complaintAddress){
+    public void addComplaint(String complaintMessage, byte[] image,String name,String email,String date,Double lat,Double lon,String complaintAddress){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("INSERT INTO " + table_complaintDetails + "(complaintMessage,image,name,date,lattitude,logitude,complaintAddress) VALUES('" + complaintMessage + "','" + image + "','" + name + "', '" + date + "', ' " + lat + "', '" + lon + "', '" + complaintAddress + "')");
+        db.execSQL("INSERT INTO " + table_complaintDetails + "(complaintMessage,image,name,email,date,lattitude,logitude,complaintAddress) VALUES('" + complaintMessage + "','" + image + "','" + name + "', '" + email + "','" + date + "', ' " + lat + "', '" + lon + "', '" + complaintAddress + "')");
         db.close();
     }
 

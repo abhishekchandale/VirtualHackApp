@@ -15,7 +15,6 @@ public class Complaint {
     public void setId(Long id) {
         this.id = id;
     }
-
     private Long id;
     private String complaintMessage;
     private String name;
@@ -24,6 +23,25 @@ public class Complaint {
     private Double lon;
     private String complaintAddress;
     private Blob image;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    private String city;
+    private String email;
 
     public String getMobile() {
         return mobile;

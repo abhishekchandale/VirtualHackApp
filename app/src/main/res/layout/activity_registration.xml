@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="5dp"
                 android:weightSum="1">
 
                 <android.support.design.widget.TextInputLayout android:layout_width="match_parent"
@@ -143,6 +143,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/confirmPass"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:textColorHint="@color/colorGreen" />
+                    <!--android:textColorHint="@color/abc_primary_text_material_dark" />-->
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <AutoCompleteTextView
+                        android:id="@+id/edit_mobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="mobile number"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:padding="8dp"

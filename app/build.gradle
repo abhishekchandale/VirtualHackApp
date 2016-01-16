@@ -18,7 +18,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/drawable-hdpi'] } }
+    sourceSets {
+        main { res.srcDirs = ['src/main/res', 'src/main/res/drawable-hdpi', 'src/main/res/anim'] }
+    }
 }
 
 dependencies {

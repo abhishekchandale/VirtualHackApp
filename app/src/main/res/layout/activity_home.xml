@@ -29,8 +29,8 @@
                   android:paddingBottom="@dimen/activity_vertical_margin"
                   android:paddingTop="@dimen/activity_vertical_margin"
                   android:paddingLeft="@dimen/activity_horizontal_margin"
-                  android:paddingRight="@dimen/activity_horizontal_margin"
-        >
+                  android:paddingRight="@dimen/activity_horizontal_margin">
+
         <android.support.v7.widget.CardView
             android:id="@+id/cardview"
             android:layout_width="fill_parent"
@@ -46,7 +46,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_margin="32dp"
-                android:src="@drawable/homeimage"
 
                 />
         </android.support.v7.widget.CardView>
@@ -70,27 +69,27 @@
             android:gravity="center"
             >
             <ImageButton
-                android:id="@+id/btn_gplus"
+                android:id="@+id/btn_sendcomp"
                 android:layout_width="@dimen/button_circle_width"
                 android:layout_height="@dimen/button_circle_height"
                 android:background="@drawable/raisecomp_button"
                 android:layout_marginTop="30dp"
                 />
             <ImageButton
-                android:id="@+id/btn_facebook"
+                android:id="@+id/btn_previewcomp"
                 android:layout_width="@dimen/button_circle_width"
                 android:layout_height="@dimen/button_circle_height"
                 android:background="@drawable/complaint"
-                android:layout_toRightOf="@+id/btn_gplus"
+                android:layout_toRightOf="@+id/btn_sendcomp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="30dp"
 
                 />
             <ImageButton
-                android:id="@+id/btn_twitter"
+                android:id="@+id/btn_tutorial"
                 android:layout_width="@dimen/button_circle_width"
                 android:layout_height="@dimen/button_circle_height"
-                android:layout_toRightOf="@+id/btn_facebook"
+                android:layout_toRightOf="@+id/btn_previewcomp"
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="30dp"
                 android:background="@drawable/complaint"
