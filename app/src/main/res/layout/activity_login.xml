@@ -60,7 +60,8 @@
                         android:maxLines="1"
                         android:padding="8dp"
                         android:singleLine="true"
-                        android:textColorHint="@color/colorGreen" />
+                        android:textColorHint="@color/colorGreen"
+                        android:text="admin" />
                     <!--android:textColorHint="@color/abc_primary_text_material_dark" />-->
                 </android.support.design.widget.TextInputLayout>
 
@@ -78,7 +79,8 @@
                         android:maxLines="1"
                         android:padding="8dp"
                         android:singleLine="true"
-                        android:textColorHint="@color/colorGreen" />
+                        android:textColorHint="@color/colorGreen"
+                        android:text="admin" />
                 </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout

@@ -46,6 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_margin="32dp"
+                android:src="@drawable/homeicon"
 
                 />
         </android.support.v7.widget.CardView>
@@ -79,7 +80,7 @@
                 android:id="@+id/btn_previewcomp"
                 android:layout_width="@dimen/button_circle_width"
                 android:layout_height="@dimen/button_circle_height"
-                android:background="@drawable/complaint"
+                android:background="@drawable/previous_request"
                 android:layout_toRightOf="@+id/btn_sendcomp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="30dp"
@@ -92,7 +93,7 @@
                 android:layout_toRightOf="@+id/btn_previewcomp"
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="30dp"
-                android:background="@drawable/complaint"
+                android:background="@drawable/usertutorial"
                />
 
         </RelativeLayout>

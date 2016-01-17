@@ -56,6 +56,7 @@ public class ComplaintEndpoint {
                 throw new ConflictException("object already Exits!");
             }
         }
+        ofy().save().entity(complaint).now();
         logger.info("Calling insertComplaint method");
         return complaint;
     }

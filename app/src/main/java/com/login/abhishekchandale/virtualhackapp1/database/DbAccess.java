@@ -42,14 +42,13 @@ public class DbAccess extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("INSERT INTO " + table_userRegistration + "(name,email,gender,birthday,location,password) VALUES('" + name + "','" + email + "','" + gender + "', '" + birthday + "', ' " + location + "', '" + password + "')");
         db.close();
-        Toast.makeText(context_,"Data Inserted",Toast.LENGTH_SHORT).show();
 
     }
 
 
     public void addComplaint(String complaintMessage, byte[] image,String name,String email,String date,Double lat,Double lon,String complaintAddress){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("INSERT INTO " + table_complaintDetails + "(complaintMessage,image,name,email,date,lattitude,logitude,complaintAddress) VALUES('" + complaintMessage + "','" + image + "','" + name + "', '" + email + "','" + date + "', ' " + lat + "', '" + lon + "', '" + complaintAddress + "')");
+        db.execSQL("INSERT INTO " + table_complaintDetails + "(complaintMessage,image,name,email,datetime,lattitude,logitude,complaintAddress) VALUES('" + complaintMessage + "','" + image + "','" + name + "', '" + email + "','" + date + "', ' " + lat + "', '" + lon + "', '" + complaintAddress + "')");
         db.close();
     }
 

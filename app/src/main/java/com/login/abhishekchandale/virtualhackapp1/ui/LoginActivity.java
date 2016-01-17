@@ -30,8 +30,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
+                    pDialog.setMessage("pleast wait..");
+                    pDialog.show();
                     dbAccess.addUser("Abhishek","abhishek.chandale@happiestminds.com","male","29Apr","Bomenalli Bangalore","admin");
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    pDialog.dismiss();
                 }catch (Exception e){
 
                     e.printStackTrace();

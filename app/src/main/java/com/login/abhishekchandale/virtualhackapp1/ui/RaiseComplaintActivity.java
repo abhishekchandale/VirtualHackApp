@@ -42,37 +42,36 @@ import static com.example.abhishek.chandale.myapplication.backend.complaintApi.C
 public class RaiseComplaintActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int CAMERA_REQUEST = 1888;
-    private ImageButton photoButton,btnpost;
+    private ImageButton photoButton, btnpost;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private Cursor cursor;
     private DbAccess dbAccess;
-    private String name,city,address,email,date,image,compMessage;
-    private Double lat,lon;
+    private String name, city, address, email, date, image, compMessage;
+    private Double lat=10.0, lon=11.0;
     private byte[] arrayimage;
     private EditText compText;
     private ProgressDialog pDailog;
-    private String TAG="RaiseComplaint";
+    private String TAG = "RaiseComplaint";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbAccess=new DbAccess(this);
+        dbAccess = new DbAccess(this);
         setContentView(R.layout.raise_complaint_activity);
-        pDailog=new ProgressDialog(this);
-        compText=(EditText)findViewById(R.id.txt_comp_message);
+        pDailog = new ProgressDialog(this);
+        compText = (EditText) findViewById(R.id.txt_comp_message);
 
         cursor = dbAccess.getUser();
-        if(cursor.moveToNext()) {
+        if (cursor.moveToNext()) {
             name = cursor.getString(cursor.getColumnIndex("name"));
             email = cursor.getString(cursor.getColumnIndex("email"));
             address = cursor.getString(cursor.getColumnIndex("location"));
             city = cursor.getString(cursor.getColumnIndex("location"));
             date = DateFormat.getTimeInstance().format(new Date());
-            lat = 10.0;
-            lon = 10.0;
-        }else{
+        } else {
 
-            Log.e(TAG,"cursor -->null");
+            Log.e(TAG, "cursor -->null");
 
         }
 
@@ -86,13 +85,13 @@ public class RaiseComplaintActivity extends AppCompatActivity implements GoogleA
             }
         });
 
-        btnpost=(ImageButton)findViewById(R.id.btn_post);
+        btnpost = (ImageButton) findViewById(R.id.btn_post);
         btnpost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 compMessage = compText.getText().toString();
-                if(compMessage!=null)
-                new uploadDatatoServer(getApplicationContext()).execute();
+                if (compMessage != null)
+                    new uploadDatatoServer(getApplicationContext()).execute();
                 dbAccess.addComplaint(compMessage, arrayimage, name, email, date, lat, lon, address);
             }
         });
@@ -123,7 +122,7 @@ public class RaiseComplaintActivity extends AppCompatActivity implements GoogleA
                 photo.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
 
                 arrayimage = buffer.array(); //Get the underlying array containing the data.
-                Log.e("Image-->",arrayimage.toString());
+                Log.e("Image-->", arrayimage.toString());
             }
         }
     }
@@ -131,13 +130,16 @@ public class RaiseComplaintActivity extends AppCompatActivity implements GoogleA
     @Override
     public void onConnected(Bundle bundle) {
 
-//        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-//                mGoogleApiClient);
-//        if (mLastLocation != null) {
-//            //TODO - do something with lat and long
-//           //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
-//            //mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
-//        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            lat=mLastLocation.getLatitude();
+            lon=mLastLocation.getLongitude();
+            Log.e(TAG,"lat->"+lat+"lon-->"+lon);
+        }
     }
 
     @Override
@@ -156,7 +158,7 @@ class uploadDatatoServer extends AsyncTask<String,Void,Complaint>{
     Context context;
     public  uploadDatatoServer(Context context){
         this.context=context;
-
+        Log.e(TAG,"Latitude"+lat+"longitude"+lon);
     }
 
     @Override
@@ -169,7 +171,8 @@ class uploadDatatoServer extends AsyncTask<String,Void,Complaint>{
 
     @Override
     protected Complaint doInBackground(String... params) {
-
+        date = DateFormat.getDateInstance().format(new Date());
+        Log.e(TAG,date);
         Complaint response=null;
         try {
 
@@ -208,6 +211,8 @@ class uploadDatatoServer extends AsyncTask<String,Void,Complaint>{
     protected void onPostExecute(Complaint complaint) {
         super.onPostExecute(complaint);
         pDailog.dismiss();
+        startActivity(new Intent(getApplicationContext(),PreviousComplaintsActivity.class));
+        finish();
     }
 }
 

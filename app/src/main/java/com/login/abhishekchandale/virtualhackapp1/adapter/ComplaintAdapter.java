@@ -43,12 +43,10 @@ public class ComplaintAdapter extends BaseAdapter{
         animationStates = new boolean[100];
         compMessage=compMessageList;
         context=pComp;
-        //compImage=icon;
         compDate=applicationName;
-        dbAccess=new DbAccess(context);
         selectedIndeces=new LinkedList<>();
         layoutInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+        notifyDataSetChanged();
     }
     public void changeSelectedPositions(int pos) {
         int index = this.selectedIndeces.indexOf(pos);
@@ -92,9 +90,9 @@ public class ComplaintAdapter extends BaseAdapter{
                 holder.compMessage=(TextView) rowView.findViewById(R.id.txt_card_comp);
         holder.img=(ImageView)rowView.findViewById(R.id.comp_Image);
         holder.compDate=(TextView)rowView.findViewById(R.id.txt_card_date);
-        holder.compMessage.setText(compMessage[position]);
+        holder.compMessage.setText("ComplaintRequest:"+compMessage[position]);
         //holder.img.setImageBitmap();
-        holder.compDate.setText(compDate[position]);
+        holder.compDate.setText("Date of complaint:"+compDate[position]);
         Animation animation=null;
         animation = AnimationUtils.loadAnimation(context, R.anim.pushup_in);
         animation.setDuration(500);

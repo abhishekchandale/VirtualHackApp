@@ -36,21 +36,24 @@ public class PreviousComplaintsActivity extends AppCompatActivity {
 
     public void complaintData(){
 
-        cursor=dbAccess.getComplaint();
-        compMessage=new String[cursor.getCount()];
-        comDate=new String[cursor.getCount()];
-        //araay=new Byte[cursor.getCount()];
-        if(cursor.moveToNext()){
+        try {
+            cursor = dbAccess.getComplaint();
+            compMessage = new String[cursor.getCount()];
+            comDate = new String[cursor.getCount()];
+            //araay=new Byte[cursor.getCount()];
+            if (cursor.moveToNext()) {
 
-            for(int i=0;cursor.moveToNext();i++){
-                compMessage[i]=cursor.getString(cursor.getColumnIndex("complaintMessage"));
-                comDate[i]=cursor.getString(cursor.getColumnIndex("date"));
-                Toast.makeText(getApplicationContext(),compMessage[i]=cursor.getString(cursor.getColumnIndex("complaintMessage")),Toast.LENGTH_LONG).show();
-               // araay=cursor.getBlob(cursor.getColumnIndex("image"));
+                for (int i = 0; cursor.moveToNext(); i++) {
+                    compMessage[i] = cursor.getString(cursor.getColumnIndex("complaintMessage"));
+                    comDate[i] = cursor.getString(cursor.getColumnIndex("datetime"));
+                    // araay=cursor.getBlob(cursor.getColumnIndex("image"));
+                }
+            } else {
+
+                Toast.makeText(getApplicationContext(), "databse not created...", Toast.LENGTH_LONG).show();
             }
-        }else {
-
-            Toast.makeText(getApplicationContext(),"databse not created...",Toast.LENGTH_LONG).show();
+        }catch (Exception e) {
+               e.printStackTrace();
         }
         complaintAdapter=new ComplaintAdapter(this,compMessage,comDate);
         listView.setAdapter(complaintAdapter);
