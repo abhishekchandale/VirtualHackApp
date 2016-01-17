@@ -37,13 +37,13 @@ public class ComplaintAdapter extends BaseAdapter{
     private int selectedIndex;
     private LinkedList<Integer> selectedIndeces=null;
 
-    public ComplaintAdapter(PreviousComplaintsActivity pComp, String[] compMessageList, byte[] icon, String[] applicationName)
+    public ComplaintAdapter(PreviousComplaintsActivity pComp, String[] compMessageList, String[] applicationName)
     {
 
         animationStates = new boolean[100];
         compMessage=compMessageList;
         context=pComp;
-        compImage=icon;
+        //compImage=icon;
         compDate=applicationName;
         dbAccess=new DbAccess(context);
         selectedIndeces=new LinkedList<>();

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.test.ApplicationTestCase;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.login.abhishekchandale.virtualhackapp1.R;
 import com.login.abhishekchandale.virtualhackapp1.adapter.ComplaintAdapter;
@@ -44,10 +45,15 @@ public class PreviousComplaintsActivity extends AppCompatActivity {
             for(int i=0;cursor.moveToNext();i++){
                 compMessage[i]=cursor.getString(cursor.getColumnIndex("complaintMessage"));
                 comDate[i]=cursor.getString(cursor.getColumnIndex("date"));
-                araay=cursor.getBlob(cursor.getColumnIndex("image"));
+                Toast.makeText(getApplicationContext(),compMessage[i]=cursor.getString(cursor.getColumnIndex("complaintMessage")),Toast.LENGTH_LONG).show();
+               // araay=cursor.getBlob(cursor.getColumnIndex("image"));
             }
+        }else {
+
+            Toast.makeText(getApplicationContext(),"databse not created...",Toast.LENGTH_LONG).show();
         }
-        complaintAdapter=new ComplaintAdapter(this,compMessage,araay,comDate);
+        complaintAdapter=new ComplaintAdapter(this,compMessage,comDate);
+        listView.setAdapter(complaintAdapter);
     }
 
 }

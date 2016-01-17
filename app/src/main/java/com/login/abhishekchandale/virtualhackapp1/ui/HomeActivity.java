@@ -35,9 +35,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_sendcomp:
                startActivity(new Intent(getApplicationContext(),RaiseComplaintActivity.class));
+                finish();
                 break;
             case R.id.btn_previewcomp:
-
+                startActivity(new Intent(getApplicationContext(),PreviousComplaintsActivity.class));
+                finish();
                 break;
             case R.id.btn_tutorial:
 

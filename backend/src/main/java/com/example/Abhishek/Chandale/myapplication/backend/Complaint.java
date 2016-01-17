@@ -42,7 +42,6 @@ public class Complaint {
 
     private String city;
     private String email;
-
     public String getMobile() {
         return mobile;
     }
