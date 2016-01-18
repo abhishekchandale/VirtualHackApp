@@ -43,7 +43,7 @@ public class PreviousComplaintsActivity extends AppCompatActivity {
             //araay=new Byte[cursor.getCount()];
             if (cursor.moveToNext()) {
 
-                for (int i = 0; cursor.moveToNext(); i++) {
+                for (int i = 1; cursor.moveToNext(); i++) {
                     compMessage[i] = cursor.getString(cursor.getColumnIndex("complaintMessage"));
                     comDate[i] = cursor.getString(cursor.getColumnIndex("datetime"));
                     // araay=cursor.getBlob(cursor.getColumnIndex("image"));

@@ -3,9 +3,17 @@ package com.example.Abhishek.Chandale.myapplication.backend;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.google.api.server.spi.config.Nullable;
+import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.server.spi.response.ConflictException;
+import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.api.datastore.QueryResultIterator;
+import com.googlecode.objectify.cmd.Query;
+
 import static com.example.Abhishek.Chandale.myapplication.backend.OfyService.ofy;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Named;
@@ -60,6 +68,50 @@ public class ComplaintEndpoint {
         logger.info("Calling insertComplaint method");
         return complaint;
     }
+
+    @ApiMethod(name = "listComplaint")
+    public CollectionResponse<Complaint> listComplaint(@Nullable @Named("cursor") String cursorString,
+                                               @Nullable @Named("count") Integer count) {
+
+        Query<Complaint> query = ofy().load().type(Complaint.class);
+        if (count != null) query.limit(count);
+        if (cursorString != null && cursorString != "") {
+            query = query.startAt(Cursor.fromWebSafeString(cursorString));
+        }
+
+        List<Complaint> records = new ArrayList<Complaint>();
+        QueryResultIterator<Complaint> iterator =  query.iterator();
+        int num = 0;
+        while (iterator.hasNext()) {
+            records.add(iterator.next());
+            if (count != null) {
+                num++;
+                if (num == count) break;
+            }
+        }
+
+        //Find the next cursor
+        if (cursorString != null && cursorString != "") {
+            Cursor cursor = iterator.getCursor();
+            if (cursor != null) {
+                cursorString = cursor.toWebSafeString();
+            }
+        }
+        return CollectionResponse.<Complaint>builder().setItems(records).setNextPageToken(cursorString).build();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     private Complaint findRecord(Long id) {
         return ofy().load().type(Complaint.class).id(id).now();
     }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+
 import com.login.abhishekchandale.virtualhackapp1.R;
 
 /**
@@ -42,6 +43,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.btn_tutorial:
+                new RegisterRequestApi(this).execute();
 
                 break;
 

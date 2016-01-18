@@ -7,18 +7,22 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.abhishek.chandale.myapplication.backend.addComplaintApi.model.AddComplaint;
 import com.example.abhishek.chandale.myapplication.backend.complaintApi.ComplaintApi;
 import com.example.abhishek.chandale.myapplication.backend.complaintApi.model.Complaint;
 import com.google.android.gms.common.ConnectionResult;
@@ -31,6 +35,7 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.login.abhishekchandale.virtualhackapp1.R;
 import com.login.abhishekchandale.virtualhackapp1.database.DbAccess;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.sql.SQLException;
@@ -104,6 +109,10 @@ public class RaiseComplaintActivity extends AppCompatActivity implements GoogleA
                     .addApi(LocationServices.API)
                     .build();
         }
+
+
+
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -156,7 +165,8 @@ public class RaiseComplaintActivity extends AppCompatActivity implements GoogleA
 class uploadDatatoServer extends AsyncTask<String,Void,Complaint>{
 
     Context context;
-    public  uploadDatatoServer(Context context){
+
+    public uploadDatatoServer(Context context){
         this.context=context;
         Log.e(TAG,"Latitude"+lat+"longitude"+lon);
     }
@@ -192,7 +202,9 @@ class uploadDatatoServer extends AsyncTask<String,Void,Complaint>{
             complaint.setLat(lat);
             complaint.setLon(lon);
             complaint.setComplaintAddress(address);
-            complaint.setImage(image);
+            StringBuffer outimage=new StringBuffer();
+            outimage.append(Base64.encodeToString(arrayimage,0));
+            complaint.setImage(outimage.toString());
             complaint.setMobile("1234567");
             complaint.setCity(city);
             response=service.insertComplaint(complaint).execute();
