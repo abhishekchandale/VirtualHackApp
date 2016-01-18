@@ -7,12 +7,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -20,9 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.example.abhishek.chandale.myapplication.backend.addComplaintApi.model.AddComplaint;
 import com.example.abhishek.chandale.myapplication.backend.complaintApi.ComplaintApi;
 import com.example.abhishek.chandale.myapplication.backend.complaintApi.model.Complaint;
 import com.google.android.gms.common.ConnectionResult;
@@ -38,11 +34,10 @@ import com.login.abhishekchandale.virtualhackapp1.database.DbAccess;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
-
-import static com.example.abhishek.chandale.myapplication.backend.complaintApi.ComplaintApi.*;
 
 public class RaiseComplaintActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -53,7 +48,7 @@ public class RaiseComplaintActivity extends AppCompatActivity implements GoogleA
     private Cursor cursor;
     private DbAccess dbAccess;
     private String name, city, address, email, date, image, compMessage;
-    private Double lat=10.0, lon=11.0;
+    private Double lat = 10.0, lon = 11.0;
     private byte[] arrayimage;
     private EditText compText;
     private ProgressDialog pDailog;
@@ -109,10 +104,20 @@ public class RaiseComplaintActivity extends AppCompatActivity implements GoogleA
                     .addApi(LocationServices.API)
                     .build();
         }
+    }
 
+    @Override
+    protected void onStart() {
+        if (mGoogleApiClient != null)
+            mGoogleApiClient.connect();
+        super.onStart();
+    }
 
-
-
+    @Override
+    protected void onStop() {
+        if (mGoogleApiClient != null)
+            mGoogleApiClient.disconnect();
+        super.onStop();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -122,7 +127,7 @@ public class RaiseComplaintActivity extends AppCompatActivity implements GoogleA
             photoButton.setImageDrawable(new BitmapDrawable(photo));
 
             if (photo != null) {
-                //calculate how many bytes our image consists of.
+                /*//calculate how many bytes our image consists of.
                 int bytes = photo.getByteCount();
                 //or we can calculate bytes this way. Use a different value than 4 if you don't use 32bit images.
                 // int bytes = b.getWidth()*b.getHeight()*4;
@@ -130,8 +135,11 @@ public class RaiseComplaintActivity extends AppCompatActivity implements GoogleA
                 ByteBuffer buffer = ByteBuffer.allocate(bytes); //Create a new buffer
                 photo.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
 
-                arrayimage = buffer.array(); //Get the underlying array containing the data.
-                Log.e("Image-->", arrayimage.toString());
+                arrayimage = buffer.array(); //Get the underlying array containing the data.*/
+
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                photo.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+                arrayimage = outputStream.toByteArray();
             }
         }
     }
@@ -145,9 +153,9 @@ public class RaiseComplaintActivity extends AppCompatActivity implements GoogleA
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
-            lat=mLastLocation.getLatitude();
-            lon=mLastLocation.getLongitude();
-            Log.e(TAG,"lat->"+lat+"lon-->"+lon);
+            lat = mLastLocation.getLatitude();
+            lon = mLastLocation.getLongitude();
+            Log.e(TAG, "lat->" + lat + "lon-->" + lon);
         }
     }
 
@@ -161,73 +169,74 @@ public class RaiseComplaintActivity extends AppCompatActivity implements GoogleA
 
     }
 
+    class uploadDatatoServer extends AsyncTask<String, Void, Complaint> {
 
-class uploadDatatoServer extends AsyncTask<String,Void,Complaint>{
+        Context context;
 
-    Context context;
-
-    public uploadDatatoServer(Context context){
-        this.context=context;
-        Log.e(TAG,"Latitude"+lat+"longitude"+lon);
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        Log.e(TAG,"AsynkPreE");
-        pDailog.setMessage("uploading request..");
-        pDailog.show();
-    }
-
-    @Override
-    protected Complaint doInBackground(String... params) {
-        date = DateFormat.getDateInstance().format(new Date());
-        Log.e(TAG,date);
-        Complaint response=null;
-        try {
-
-            ComplaintApi.Builder builder = new ComplaintApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                    .setRootUrl("https://virtualhack-1193.appspot.com/_ah/api/")
-                    .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                        @Override
-                        public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                            abstractGoogleClientRequest.setDisableGZipContent(true);
-                        }
-                    });
-            ComplaintApi service = builder.build();
-            Complaint complaint = new Complaint();
-            complaint.setComplaintMessage(compMessage);
-            complaint.setName(name);
-            complaint.setEmail(email);
-            complaint.setLat(lat);
-            complaint.setLon(lon);
-            complaint.setComplaintAddress(address);
-            StringBuffer outimage=new StringBuffer();
-            outimage.append(Base64.encodeToString(arrayimage,0));
-            complaint.setImage(outimage.toString());
-            complaint.setMobile("1234567");
-            complaint.setCity(city);
-            response=service.insertComplaint(complaint).execute();
-
-            Log.e(TAG, "Data Upload successfully ");
-
-        }catch (Exception e){
-            Log.e(TAG,e.getMessage());
-            e.printStackTrace();
-
+        public uploadDatatoServer(Context context) {
+            this.context = context;
+            Log.e(TAG, "Latitude" + lat + "longitude" + lon);
         }
-        return response;
-    }
 
-    @Override
-    protected void onPostExecute(Complaint complaint) {
-        super.onPostExecute(complaint);
-        pDailog.dismiss();
-        startActivity(new Intent(getApplicationContext(),PreviousComplaintsActivity.class));
-        finish();
-    }
-}
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.e(TAG, "AsynkPreE");
+            pDailog.setMessage("uploading request..");
+            pDailog.show();
+        }
 
+        @Override
+        protected Complaint doInBackground(String... params) {
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            date = df.format(c.getTime());
+            Log.e(TAG, date);
+            Complaint response = null;
+            try {
+
+                ComplaintApi.Builder builder = new ComplaintApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://virtualhack-1193.appspot.com/_ah/api/")
+                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                            @Override
+                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
+                                abstractGoogleClientRequest.setDisableGZipContent(true);
+                            }
+                        });
+                ComplaintApi service = builder.build();
+                Complaint complaint = new Complaint();
+                complaint.setComplaintMessage(compMessage);
+                complaint.setName(name);
+                complaint.setEmail(email);
+                complaint.setLat(lat);
+                complaint.setLon(lon);
+                complaint.setComplaintAddress(address);
+                StringBuffer outimage = new StringBuffer();
+                outimage.append(Base64.encodeToString(arrayimage, Base64.DEFAULT));
+                complaint.setImage(outimage.toString());
+                complaint.setMobile("1234567");
+                complaint.setCity(city);
+                complaint.setDate(date);
+                response = service.insertComplaint(complaint).execute();
+
+                Log.e(TAG, "Data Upload successfully ");
+
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
+
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(Complaint complaint) {
+            super.onPostExecute(complaint);
+            pDailog.dismiss();
+            startActivity(new Intent(getApplicationContext(), PreviousComplaintsActivity.class));
+            finish();
+        }
+    }
 
 
 }//class end

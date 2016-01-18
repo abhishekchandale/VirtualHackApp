@@ -21,41 +21,42 @@ public class PreviousComplaintsActivity extends AppCompatActivity {
     private ListView listView;
     private Cursor cursor;
     private DbAccess dbAccess;
-    private String compMessage[],comDate[];
-    private byte[] araay;
+    private String compMessage[], comDate[];
+    private byte[][] blobArray;
     private ComplaintAdapter complaintAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.previous_comp_activity);
-        dbAccess=new DbAccess(this);
-        listView=(ListView)findViewById(R.id.listView);
+        dbAccess = new DbAccess(this);
+        listView = (ListView) findViewById(R.id.listView);
         complaintData();
     }
 
-    public void complaintData(){
+    public void complaintData() {
 
         try {
             cursor = dbAccess.getComplaint();
             compMessage = new String[cursor.getCount()];
             comDate = new String[cursor.getCount()];
-            //araay=new Byte[cursor.getCount()];
+            blobArray = new byte[cursor.getCount()][];
             if (cursor.moveToNext()) {
 
-                for (int i = 1; cursor.moveToNext(); i++) {
+                for (int i = 0; i < cursor.getCount(); i++) {
                     compMessage[i] = cursor.getString(cursor.getColumnIndex("complaintMessage"));
                     comDate[i] = cursor.getString(cursor.getColumnIndex("datetime"));
-                    // araay=cursor.getBlob(cursor.getColumnIndex("image"));
+                    blobArray[i] = cursor.getBlob(cursor.getColumnIndex("image"));
+                    cursor.moveToNext();
                 }
             } else {
 
                 Toast.makeText(getApplicationContext(), "databse not created...", Toast.LENGTH_LONG).show();
             }
-        }catch (Exception e) {
-               e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        complaintAdapter=new ComplaintAdapter(this,compMessage,comDate);
+        complaintAdapter = new ComplaintAdapter(this, compMessage, comDate, blobArray);
         listView.setAdapter(complaintAdapter);
     }
 

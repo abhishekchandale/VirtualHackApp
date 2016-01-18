@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">App-Client</string>
+    <string name="app_name">CleanCity-Client</string>
     <string name="action_settings">Settings</string>
 
     <!--login-->

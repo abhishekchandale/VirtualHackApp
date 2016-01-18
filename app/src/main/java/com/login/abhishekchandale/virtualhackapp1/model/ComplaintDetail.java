@@ -12,6 +12,25 @@ public class ComplaintDetail {
     private double lon;
     private String dateTime;
     private String complaintAddress;
+    private String name;
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private String Email;
     private ComplaintDetail(){
 
         String complaintText="";
@@ -20,6 +39,8 @@ public class ComplaintDetail {
         double lon=0.0;
         String dateTime="";
         String complaintAddress="";
+        String name="";
+        String email="";
 
     }
 

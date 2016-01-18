@@ -23,10 +23,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         btnRaiseComp=(ImageButton)findViewById(R.id.btn_sendcomp);
         btnPreviousComp=(ImageButton)findViewById(R.id.btn_previewcomp);
-        btnTutorial=(ImageButton)findViewById(R.id.btn_tutorial);
         btnRaiseComp.setOnClickListener(this);
         btnPreviousComp.setOnClickListener(this);
-        btnTutorial.setOnClickListener(this);
     }
 
     @Override
@@ -42,10 +40,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(getApplicationContext(),PreviousComplaintsActivity.class));
                 finish();
                 break;
-            case R.id.btn_tutorial:
-                new RegisterRequestApi(this).execute();
 
-                break;
 
         }
 
